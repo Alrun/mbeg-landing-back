@@ -1,0 +1,12 @@
+.idea/
+.git/
+.gitignore
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+#*/*/node_modules/
+README.md
+LICENSE
+
+# nginx/
+# npm-debug.log

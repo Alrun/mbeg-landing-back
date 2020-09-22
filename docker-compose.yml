@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7 #Версия MySQL
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress #root пароль MySQL
+      MYSQL_DATABASE: wordpress #Имя базы данных
+      MYSQL_USER: wordpress #Пользователь базы данных
+      MYSQL_PASSWORD: wordpress #Пароль пользователя базы данных
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest #Устанавливаем последнюю версию wp
+    ports:
+      - "8000:80"
+    restart: always
+    volumes:
+#      - ./wp-content:/var/www/html/wp-content
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress #берется из MYSQL_USER
+      WORDPRESS_DB_PASSWORD: wordpress #берется из MYSQL_PASSWORD
+      WORDPRESS_DB_NAME: wordpress #берется из MYSQL_DATABASE
+
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    restart: always
+#    ports:
+#      - 3333:80
+#    environment:
+#      PMA_HOST: db:3306
+#      MYSQL_ROOT_PASSWORD: wordpress #берется из MYSQL_ROOT_PASSWORD
+#
+  mailhog:
+    image: mailhog/mailhog #Сервер для работы с почтой
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+#volumes:
+#  db_data: {}
